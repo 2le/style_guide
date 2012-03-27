@@ -85,16 +85,15 @@ You can generate a PDF or an HTML copy of this guide using
 
         ```$ git config --global core.autocrlf true```
 
-* Use spaces around operators, after commas, colons and semicolons, around `{`
-  and before `}`. Whitespace might be (mostly) irrelevant to the Ruby
-  interpreter, but its proper use is the key to writing easily
-  readable code.
+* Use spaces around operators, after commas, colons and semicolons, and before `}`.
+  Whitespace might be (mostly) irrelevant to the Ruby interpreter, but its
+  proper use is the key to writing easily readable code.
 
     ```Ruby
     sum = 1 + 2
     a, b = 1, 2
     1 > 2 ? true : false; puts 'Hi'
-    [1, 2, 3].each { |e| puts e }
+    [1, 2, 3].each{|e| puts e }
     ```
 
     The only exception is when using the exponent operator:
@@ -107,16 +106,15 @@ You can generate a PDF or an HTML copy of this guide using
     e = M * c**2
     ```
 
-* No spaces after `(`, `[` or before `]`, `)`.
+* No spaces after `(`, `[`, `{`, or before `]`, `)`.
 
     ```Ruby
     some(arg).other
     [1, 2, 3].length
+    [1, 2, 3].each{|e| puts e }
     ```
 
-* Indent `when` as deep as `case`. I know that many would disagree
-  with this one, but it's the style established in both the "The Ruby
-  Programming Language" and "Programming Ruby".
+* Indent `when` as deep as `case`. 
 
     ```Ruby
     case
@@ -138,6 +136,18 @@ You can generate a PDF or an HTML copy of this guide using
            when 1940..1950 then 'Bebop'
            else 'Jazz'
            end
+
+    # OR
+    
+    kind = \
+      case year
+      when 1850..1889 then 'Blues'
+      when 1890..1909 then 'Ragtime'
+      when 1910..1929 then 'New Orleans Jazz'
+      when 1930..1939 then 'Swing'
+      when 1940..1950 then 'Bebop'
+      else 'Jazz'
+      end
     ```
 
 * Use empty lines between `def`s and to break up a method into logical
@@ -156,8 +166,11 @@ You can generate a PDF or an HTML copy of this guide using
       result
     end
     ```
+    
+  - However, multiple long paragraphs in a method is a smell -- consider
+    moving each into a small self-documenting method.
 
-* Align the parameters of a method call if they span over multiple lines.
+* If the parameters of a method call span multiple lines, move all of them down to read in parallel.
 
     ```Ruby
     # starting point (line is too long)
@@ -165,37 +178,92 @@ You can generate a PDF or an HTML copy of this guide using
       Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
     end
 
-    # bad (normal indent)
+    # bad (hanging way out in space):
     def send_mail(source)
-      Mailer.deliver(
-        to: 'bob@example.com',
-        from: 'us@example.com',
-        subject: 'Important message',
-        body: source.text)
+      Mailer.deliver(to:      'bob@example.com',
+                     from:    'us@example.com',
+                     subject: 'Important message',
+                     body:    source.text)
     end
 
-    # bad (double indent)
+    # bad (inconsistent indentation):
     def send_mail(source)
-      Mailer.deliver(
-          to: 'bob@example.com',
-          from: 'us@example.com',
-          subject: 'Important message',
-          body: source.text)
+      Mailer.deliver(to:      'bob@example.com',
+        from:    'us@example.com',
+        subject: 'Important message',
+        body:    source.text)
     end
 
     # good
     def send_mail(source)
-      Mailer.deliver(to: 'bob@example.com',
-                     from: 'us@example.com',
-                     subject: 'Important message',
-                     body: source.text)
+      Mailer.deliver(
+        to:      'bob@example.com',
+        from:    'us@example.com',
+        subject: 'Important message',
+        body:     source.text)
     end
     ```
 
-* Use RDoc and its conventions for API documentation.  Don't put an
+* Indent `protected`, `public`, `private` and `module_function` at the same
+  level as the enclosing declaration:
+  
+    ```Ruby
+    module Validations
+
+      def valid?(context = nil)
+        current_context, self.validation_context = validation_context, context
+        errors.clear
+        run_validations!
+      ensure
+        self.validation_context = current_context
+      end
+
+      # ...
+
+    protected
+
+      def run_validations!
+        run_callbacks :validate
+        errors.empty?
+      end
+    end
+    ```
+
+  * bad (easy to read past):
+  
+    ```Ruby
+    module Validations
+      def valid?
+        # ....
+      end
+      
+      protected
+      
+      def run_validations!
+        # ...
+      end
+    end
+
+  * bad (inconsistent indentation, editors will screw up):
+  
+    ```Ruby
+    module Validations
+      def valid?
+        # ....
+      end
+      
+      protected
+      
+        def run_validations!
+          # ...
+        end
+    end
+
+* Use YARD and its conventions for API documentation.  Don't put an
   empty line between the comment block and the `def`.
 * Keep lines fewer than 80 characters.
-* Avoid trailing whitespace.
+* Remove trailing whitespace.
+* Convert all tabs to spaces.
 
 ## Syntax
 
@@ -302,6 +370,8 @@ You can generate a PDF or an HTML copy of this guide using
     # control flow
     document.saved? or document.save!
     ```
+    
+  using `and/or` implies "don't worry about 
 
 * Avoid multi-line `?:` (the ternary operator), use `if/unless` instead.
 
