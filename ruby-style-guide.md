@@ -10,26 +10,35 @@ The guide is separated into several sections of related rules. I've
 tried to add the rationale behind the rules (if it's omitted I've
 assumed that is pretty obvious).
 
-I didn't come up with all the rules out of nowhere - they are mostly
-based on my extensive career as a professional software engineer,
-feedback and suggestions from members of the Ruby community and
+These rules didn't come out of nowhere - they are largely based on @bbatsov's
+[ruby-style-guide](https://github.com/bbatsov/ruby-style-guide) and the sober judgement of our
+senior engineers. They reflect feedback and suggestions from members of the Ruby community and
 various highly regarded Ruby programming resources, such as
-["Programming Ruby 1.9"](http://pragprog.com/book/ruby3/programming-ruby-1-9)
-and ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177).
+["Programming Ruby 1.9"](http://pragprog.com/book/ruby3/programming-ruby-1-9) and
+["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177).
 
-The guide is still a work in progress - some rules are lacking
-examples, some rules don't have examples that illustrate them clearly
-enough. In due time these issues will be addressed - just keep them in
-mind for now.
+The guide is still a work in progress, and we strongly invite your feedback --
+guidelines to add, decisions you disagree with, illustrations of good or bad
+practice.
+
+This is a _guide_, not a _rulebook_. Break the rules with good taste, but not
+capriciously. For every one of the guidelines, there is a sound argument against
+it -- otherwise we wouldn't need to spell it out. Nobody needs a style guide to
+say "don't write your documentation in pig latin". Reasonable people can
+disagree whether `drink = if Time.now.hour > 19 then :beer else :soda end` is
+clearer than `drink = (Time.now.hour > 19) ? :beer : :soda`[^1], but at
+infochimps we've settled on the second. Having one uniform choice carries more
+benefit than whatever fine distinction separates two close alternatives.
 
 You can generate a PDF or an HTML copy of this guide using
 [Transmuter](https://github.com/TechnoGate/transmuter).
 
+[^1]: http://  "indeed, the authors of coffeescript outlawed the ternary (`t ? a : b`) operator"
+
 ## Source Code Layout
 
-> Nearly everybody is convinced that every style but their own is
-> ugly and unreadable. Leave out the "but their own" and they're
-> probably right... <br/>
+> Nearly everybody is convinced that every style but their own is ugly and
+> unreadable. Leave out the "but their own" and they're probably right... <br/>
 > -- Jerry Coffin (on indentation)
 
 * Use `UTF-8` as the source file encoding.
@@ -47,11 +56,11 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
-* Use Unix-style line endings. (*BSD/Solaris/Linux/OSX users are covered by default,
-  Windows users have to be extra careful.)
-    * If you're using Git you might want to add the following
-    configuration setting to protect your project from Windows line
-    endings creeping in:
+* Use Unix-style line endings. 
+  - BSD/Solaris/Linux/OSX users are covered by default, Windows users have to be
+    extra careful.
+  - If you're using Git you might want to add the following configuration
+    setting to protect your project from Windows line endings creeping in:
 
         ```$ git config --global core.autocrlf true```
 
@@ -98,6 +107,7 @@ You can generate a PDF or an HTML copy of this guide using
       song.play
     end
 
+    # good
     kind = case year
            when 1850..1889 then 'Blues'
            when 1890..1909 then 'Ragtime'
@@ -107,9 +117,8 @@ You can generate a PDF or an HTML copy of this guide using
            else 'Jazz'
            end
 
-    # OR
-    
-    kind = \
+    # good
+    kind = 
       case year
       when 1850..1889 then 'Blues'
       when 1890..1909 then 'Ragtime'
@@ -122,6 +131,8 @@ You can generate a PDF or an HTML copy of this guide using
 
 * Use empty lines between `def`s and to break up a method into logical
   paragraphs.
+  - However, multiple long paragraphs in a method is a smell -- consider
+    moving each into a small self-documenting method.
 
     ```Ruby
     def some_method
@@ -136,9 +147,6 @@ You can generate a PDF or an HTML copy of this guide using
       result
     end
     ```
-    
-  - However, multiple long paragraphs in a method is a smell -- consider
-    moving each into a small self-documenting method.
 
 * Align parallel constructions or assignments: it makes the code easier to read,
   and highlights parallel functionality.
@@ -288,6 +296,10 @@ You can generate a PDF or an HTML copy of this guide using
       # ...
     end
 
+* For text files and complex documentation blocks, use
+  [Markdown](http://daringfireball.net/projects/markdown/syntax) (not textile,
+  plain text or RDoc).
+
 ### Internal comments
 
 * Write self-documenting code and ignore the rest of this section. Seriously!
@@ -298,24 +310,25 @@ You can generate a PDF or an HTML copy of this guide using
     
     def adjust_hemiconducer_circuit(sagacity)
       # align the marzelvanes
-      ...
+      ... 4 lines ...
       # calculate moon phase and reluctance
-      ...
+      ... 7 lines ..
       # counterrotate the plenum and flux capacitors
-      ...
+      ... 12 lines ...
     end
     
-    # good: plot doesn't get int the way of the story
+    # good: story doesn't get in the way of the plot
     
     def adjust_hemiconducer_circuit(sagacity)
       align_marzelvanes(sagacity)
+      
       moon       = Moon.current
       reluctance = Reluctor.find_reluctance(:sagacity => sagacity)
+      
       counterrotate_plenum_capacitors(moon, reluctance)
       counterrotate_flux_capacitors(moon, reluctance)
     end
     ```
-
 
 * Comments longer than a word are capitalized and use punctuation. Use [one
   space](http://en.wikipedia.org/wiki/Sentence_spacing) after periods.
@@ -1382,6 +1395,20 @@ syntax.
 
     # best of all, though, would to define_method as each findable attribute is declared  
     ```
+
+* avoid Aliasing/Redefining methods. Instead, generate a `Module` and inject it.
+  - calling `super` is a good idea.
+  - if you're going to monkey patch, make sure that the method isn’t already there.
+
+## Setup
+
+* Include a `README.md` that includes all installation steps.
+* Use [Markdown](http://daringfireball.net/projects/markdown/syntax), not textile, plain text or RDoc.
+* Include a `Procfile` if there are processes to start.
+* Include a `Gemfile`. If the project is a standalone app, you should check
+  `Gemfile.lock` in to the repo. If it is not deployed independently, you should
+  exclude `Gemfile.lock`.
+* Do not version an `.rvmrc` file into a repo.
 
 ## Misc
 
