@@ -229,6 +229,24 @@ You can generate a PDF or an HTML copy of this guide using
     reluctance  = hemiconducer.reluctor.reluctance
     phase       = moon.phase - average_marzelvane_phase
     ```
+    
+* Don't be over-DRY -- a repeated clause, written in parallel, is easier to read
+  than a trivial loop:
+  
+    ```Ruby
+    # bad
+    [ :flux, :phrasal, :nimbus ].each do |capacitor_type|
+      counterrotate_capacitor capacitor_type, moon.phase, reluctance
+    end
+    
+    # good
+    counterrotate_capacitor :flux,    moon.phase, reluctance
+    counterrotate_capacitor :phrasal, moon.phase, reluctance
+    counterrotate_capacitor :nimbus,  moon.phase, reluctance
+    ```
+    
+  let good taste be your guide, but when lines of code are equivalent prefer the
+  small multiple over the explicit loop.
 
 * Indent `protected`, `public`, `private` and `module_function` at the same
   level as the enclosing declaration.
@@ -349,8 +367,8 @@ You can generate a PDF or an HTML copy of this guide using
       moon       = Moon.current
       reluctance = Reluctor.find_reluctance(:sagacity => sagacity)
 
-      counterrotate_plenum_capacitors(moon, reluctance)
-      counterrotate_flux_capacitors(moon, reluctance)
+      counterrotate_capacitor :plenum, moon.phase, reluctance
+      counterrotate_capacitor :nimbus, moon.phase, reluctance
     end
     ```
 
