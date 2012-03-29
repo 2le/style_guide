@@ -33,7 +33,7 @@ benefit than whatever fine distinction separates two close alternatives.
 You can generate a PDF or an HTML copy of this guide using
 [Transmuter](https://github.com/TechnoGate/transmuter).
 
-[^1]: http://bit.ly/coffescript-says-no-to-ternary Indeed, the authors of coffeescript outlawed the ternary (`t ? a : b`) operator
+[^1]: http://bit.ly/coffescript-says-no-to-ternary "Indeed, the authors of coffeescript outlawed the ternary (`t ? a : b`) operator"
 
 ### Table of Contents
 
