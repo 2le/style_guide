@@ -255,35 +255,37 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
-  * bad (easy to read past):
+  - bad (easy to read past):
 
-    ```Ruby
-    module Validations
-      def valid?
-        # ....
-      end
-
-      protected
-
-      def run_validations!
-        # ...
-      end
-    end
-
-  * bad (inconsistent indentation, editors will screw up):
-
-    ```Ruby
-    module Validations
-      def valid?
-        # ....
-      end
-
-      protected
-
+      ```Ruby
+      module Validations
+        def valid?
+          # ....
+        end
+  
+        protected
+  
         def run_validations!
           # ...
         end
-    end
+      end
+      ```
+
+  - bad (inconsistent indentation, editors will screw up):
+
+      ```Ruby
+      module Validations
+        def valid?
+          # ....
+        end
+  
+        protected
+  
+          def run_validations!
+            # ...
+          end
+      end
+      ```
 
 * Keep lines fewer than 120 characters.
 * Remove trailing whitespace.
