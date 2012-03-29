@@ -35,10 +35,29 @@ You can generate a PDF or an HTML copy of this guide using
 
 [^1]: http://  "indeed, the authors of coffeescript outlawed the ternary (`t ? a : b`) operator"
 
+### Table of Contents
+
+* [Source Code Layout](#layout)
+* [Documentation](#documentation)
+* [Syntax](#syntax)
+* [Naming](#naming)
+* [Annotations](#annotations)
+* [Classes](#classes)
+* [Exceptions](#exceptions)
+* [Collections](#collections)
+* [Strings](#strings)
+* [Regular Expressions](#regexps)
+* [Percent Literals](#percent_literals)
+* [Metaprogramming](#metaprogramming)
+* [Setup](#setup)
+* [Misc](#misc)
+
+<a name="layout"></a>
 ## Source Code Layout
 
-> Nearly everybody is convinced that every style but their own is ugly and
-> unreadable. Leave out the "but their own" and they're probably right... <br/>
+> Nearly everybody is convinced that every style but their own is
+> ugly and unreadable. Leave out the "but their own" and they're
+> probably right... <br/>
 > -- Jerry Coffin (on indentation)
 
 * Use `UTF-8` as the source file encoding.
@@ -56,7 +75,7 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
-* Use Unix-style line endings. 
+* Use Unix-style line endings.
   - BSD/Solaris/Linux/OSX users are covered by default, Windows users have to be
     extra careful.
   - If you're using Git you might want to add the following configuration
@@ -64,9 +83,10 @@ You can generate a PDF or an HTML copy of this guide using
 
         ```$ git config --global core.autocrlf true```
 
-* Use spaces around operators, after commas, colons and semicolons, and before `}`.
-  Whitespace might be (mostly) irrelevant to the Ruby interpreter, but its
-  proper use is the key to writing easily readable code.
+* Use spaces around operators, after commas, colons and semicolons,
+  and before `}`. Whitespace might be (mostly) irrelevant to the Ruby
+  interpreter, but its proper use is the key to writing easily
+  readable code.
 
     ```Ruby
     sum = 1 + 2
@@ -93,7 +113,7 @@ You can generate a PDF or an HTML copy of this guide using
     [1, 2, 3].each{|e| puts e }
     ```
 
-* Indent `when` as deep as `case`. 
+* Indent `when` as deep as `case`.
 
     ```Ruby
     case
@@ -118,7 +138,7 @@ You can generate a PDF or an HTML copy of this guide using
            end
 
     # good
-    kind = 
+    kind =
       case year
       when 1850..1889 then 'Blues'
       when 1890..1909 then 'Ragtime'
@@ -146,35 +166,6 @@ You can generate a PDF or an HTML copy of this guide using
     def some_method
       result
     end
-    ```
-
-* Align parallel constructions or assignments: it makes the code easier to read,
-  and highlights parallel functionality.
-
-
-    ```Ruby
-    # bad
-    def send_mail(source)
-      Mailer.deliver(
-        to => 'bob@example.com',
-        from => 'us@example.com',
-        subject => 'Important message',
-        body => source.text)
-    end
-
-    # good
-    def send_mail(source)
-      Mailer.deliver(
-        to      => 'bob@example.com',
-        from    => 'us@example.com',
-        subject => 'Important message',
-        body    => source.text)
-    end
-    
-    # good
-    helicity    = hemiconducer.cromulence ** 2
-    reluctance  = hemiconducer.reluctor.reluctance
-    phase       = moon.phase - average_marzelvane_phase
     ```
 
 * If the parameters of a method call span multiple lines, move all of them down to read in parallel.
@@ -211,9 +202,37 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
+* Align parallel constructions or assignments: it makes the code easier to read,
+  and highlights parallel functionality.
+
+    ```Ruby
+    # bad
+    def send_mail(source)
+      Mailer.deliver(
+        to => 'bob@example.com',
+        from => 'us@example.com',
+        subject => 'Important message',
+        body => source.text)
+    end
+
+    # good
+    def send_mail(source)
+      Mailer.deliver(
+        to      => 'bob@example.com',
+        from    => 'us@example.com',
+        subject => 'Important message',
+        body    => source.text)
+    end
+
+    # good
+    helicity    = hemiconducer.cromulence ** 2
+    reluctance  = hemiconducer.reluctor.reluctance
+    phase       = moon.phase - average_marzelvane_phase
+    ```
+
 * Indent `protected`, `public`, `private` and `module_function` at the same
   level as the enclosing declaration:
-  
+
     ```Ruby
     module Validations
 
@@ -237,30 +256,30 @@ You can generate a PDF or an HTML copy of this guide using
     ```
 
   * bad (easy to read past):
-  
+
     ```Ruby
     module Validations
       def valid?
         # ....
       end
-      
+
       protected
-      
+
       def run_validations!
         # ...
       end
     end
 
   * bad (inconsistent indentation, editors will screw up):
-  
+
     ```Ruby
     module Validations
       def valid?
         # ....
       end
-      
+
       protected
-      
+
         def run_validations!
           # ...
         end
@@ -270,6 +289,7 @@ You can generate a PDF or an HTML copy of this guide using
 * Remove trailing whitespace.
 * Convert all tabs to spaces.
 
+<a name="documentation"></a>
 ## Documentation
 
 > Good code is its own best documentation. As you're about to add a
@@ -278,20 +298,20 @@ You can generate a PDF or an HTML copy of this guide using
 > it even clearer. <br/>
 > -- Steve McConnell
 
-* Use YARD and its conventions for API documentation.  
+* Use YARD and its conventions for API documentation.
 * Don't put an empty line between the comment block and the `def`.
 * Avoid superfluous comments:
 
     ```Ruby
     # bad: adds nothing to my understanding
-    
+
     # convert the model to xml
     def to_xml
       # ...
     end
-    
+
     # good: method name tells me everything I need to know.
-    
+
     def to_xml
       # ...
     end
@@ -307,7 +327,7 @@ You can generate a PDF or an HTML copy of this guide using
 
     ```Ruby
     # bad: defocused
-    
+
     def adjust_hemiconducer_circuit(sagacity)
       # align the marzelvanes
       ... 4 lines ...
@@ -316,15 +336,15 @@ You can generate a PDF or an HTML copy of this guide using
       # counterrotate the plenum and flux capacitors
       ... 12 lines ...
     end
-    
+
     # good: story doesn't get in the way of the plot
-    
+
     def adjust_hemiconducer_circuit(sagacity)
       align_marzelvanes(sagacity)
-      
+
       moon       = Moon.current
       reluctance = Reluctor.find_reluctance(:sagacity => sagacity)
-      
+
       counterrotate_plenum_capacitors(moon, reluctance)
       counterrotate_flux_capacitors(moon, reluctance)
     end
@@ -343,12 +363,13 @@ You can generate a PDF or an HTML copy of this guide using
   comment.
 * Avoid writing comments to explain bad code. Refactor the code to
   make it self-explanatory. (Do or do not - there is no try.)
-    
 
+
+<a name="syntax"></a>
 ## Syntax
 
 * Use `def` with parentheses when there are arguments. Omit the
-  parentheses when the method doesn't accept any arguments. 
+  parentheses when the method doesn't accept any arguments.
 
      ```Ruby
      def some_method
@@ -392,8 +413,9 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
-* Favor the ternary operator(`?:`) over `if/then/else/end` constructs.
-  It's more common and obviously more concise.
+* Favor the ternary operator(`?:`) over `if/then/else/end` constructs.  It's
+  more common and obviously more concise. Group complex sub-clauses in
+  parentheses.
 
     ```Ruby
     # bad
@@ -401,6 +423,12 @@ You can generate a PDF or an HTML copy of this guide using
 
     # good
     result = some_condition ? something : something_else
+
+    # bad (needs parens)
+    drinks =  age > 18  ? ['beer', 'wine'] : ['shirley temple']
+
+    # good
+    drinks = (age > 18) ? ['beer', 'wine'] : ['shirley temple']
     ```
 
 * Use one expression per branch in a ternary operator. This
@@ -419,18 +447,20 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
-* Never use `if x: ...` - it is removed in Ruby 1.9. Use
-  the ternary operator instead.
+* Never use `if x; ...` (with a semicolon). Also never use `if x: ...` (with a
+  colon) - it is not only bad form but it has been removed in Ruby 1.9. Use the
+  ternary operator instead.
 
     ```Ruby
     # bad
     result = if some_condition: something else something_else end
 
+    # bad
+    result = if some_condition; something else something_else end
+
     # good
     result = some_condition ? something : something_else
     ```
-
-* Never use `if x; ...`. Use the ternary operator instead.
 
 * Use `when x then ...` for one-line cases. The alternative syntax
   `when x: ...` is removed in Ruby 1.9.
@@ -450,8 +480,8 @@ You can generate a PDF or an HTML copy of this guide using
     # control flow
     document.saved? or document.save!
     ```
-    
-  using `and/or` implies "don't worry about this 
+
+  - us `and/or` implies "don't worry about this
 
 * Avoid multi-line `?:` (the ternary operator), use `if/unless` instead.
 
@@ -507,7 +537,7 @@ You can generate a PDF or an HTML copy of this guide using
     ```
 
 * Don't use parentheses around a simple condition in an `if/unless/while`,
-  unless the condition contains an assignment (see "Using the return value 
+  unless the condition contains an assignment (see "Using the return value
   of `=`" below).
 
     ```Ruby
@@ -632,7 +662,7 @@ You can generate a PDF or an HTML copy of this guide using
 
     # bad
     if v = array.grep(/foo/) ...
-    
+
     # also good - shows intended use of assignment and has correct precedence.
     if (v = self.next_value) == "hello" ...
     ```
@@ -654,10 +684,10 @@ values. (Consider what would happen if the current value happened to be
 
     # good
     enabled = true if enabled.nil?
-    
+
     # bad
     nuke[:launch] ||= default_launch_state
-    
+
     # good
     nuke[:launch] = default_launch_state unless nuke.has_key?(:launch)
     ```
@@ -716,6 +746,7 @@ syntax.
     result = hash.map{|_, v| v + 1 }
     ```
 
+<a name="naming"></a>
 ## Naming
 
 > The only real difficulties in programming are cache invalidation and
@@ -727,7 +758,7 @@ syntax.
 * Use `underscore_case` for methods and variables.
 * Use `CamelCase` for classes and modules. Even acronyms like HTTP,
   RFC, XML should be camelcased: `HttpRequest`, `XmlDoc`.
-* The `CamelCase` and `underscore_case` should always agree: 
+* The `CamelCase` and `underscore_case` should always agree:
 
     ```Ruby
     # bad (missing underscore)
@@ -740,18 +771,18 @@ syntax.
 * Use `ALL_CAPS` for other constants.
 * Do not use `lowerCamelCase` in any context.
 * The names of predicate methods (methods that return a boolean value)
-  should end in a question mark. (i.e. `Array#empty?`).
-* Methods names should end with an exclamation point when they are:
+  should end in a question mark. (e.g. `Array#empty?`).
+* Method names should end with an exclamation point when they are:
   - potentially "dangerous": `launch_nukes!`, `db_table.drop!`
   - have suprising side effects: modify `self` or the arguments, `exit!`
   - in rare cases (notably `ActiveRecord`), an exclamation point indicates the
     'loud' (exception-raising) version of a method that normally returns false
     on failure. Use this sparingly -- it's not assertive, and makes it easy to
     ignore necessary error handling.
-* When using `Array` methods with short blocks, name a generic argument `|el|` 
+* When using `Array` methods with short blocks, name a generic argument `|el|`
   -- do not use `|e|` or other variants. If they are not generic, use
-  precise names (`|user|`).  
-* When using `Hash` methods with short blocks, name generic arguments `|key, val|` 
+  precise names (`|user|`).
+* When using `Hash` methods with short blocks, name generic arguments `|key, val|`
   -- do not use `|k, v|` or other variants. If they are not generic, use
   precise names (`|user_id, user_name|`). If it is a named-record mapping, name
   the arguments `something_name` and `something_info`:
@@ -762,7 +793,7 @@ syntax.
       # ...
     end
     ```
-  
+
 * When using `reduce` with short blocks, name the arguments `|acc, el|`
   (accumulator, element).
 * When defining binary operators, name the argument `other`.
@@ -773,18 +804,19 @@ syntax.
     end
     ```
 
-* Prefer `map` over `collect`, `find` over `detect`, `select` over `find_all`,
-  `reduce` over `inject` and `size` over `length`. This is not a hard
-  requirement; if the use of the alias enhances readability, it's ok to use
-  it. The rhyming methods are inherited from Smalltalk and are not common in
-  other programming languages. The reason the use of `select` is encouraged over
-  `find_all` is that it goes together nicely with `reject` and its name is
-  pretty self-explanatory.
+* Prefer `map` over `collect`, `find` over `detect`, `select` over
+  `find_all`, `reduce` over `inject` and `size` over `length`. This is
+  not a hard requirement; if the use of the alias enhances
+  readability, it's ok to use it. The rhyming methods are inherited from
+  Smalltalk and are not common in other programming languages. The
+  reason the use of `select` is encouraged over `find_all` is that it
+  goes together nicely with `reject` and its name is pretty self-explanatory.
 
-## Annotations (FIXME, TODO, etc)
+<a name="annotations"></a>
+## Annotations
 
 * Annotations should be written on the line immediately above
-  the relevant code.  
+  the relevant code.
 * The annotation keyword is followed by a colon and a space, then a note
   describing the problem.
 * If multiple lines are required to describe the problem, subsequent
@@ -820,6 +852,7 @@ syntax.
   client does X currently?`
 * Don't use other custom annotation keywords.
 
+<a name="classes"></a>
 ## Classes
 
 * When designing class hierarchies make sure that they conform to the
@@ -876,8 +909,8 @@ mutators.
         @last_name = last_name
       end
     end
-    ```  
-  
+    ```
+
 * Consider adding factory methods to provide additional sensible ways
 to create instances of a particular class.
 
@@ -947,15 +980,15 @@ in inheritance.
     ```
 
     As you can see all the classes in a class hierarchy actually share one
-    class variable. 
-    
+    class variable.
+
   - If the attribute is not visible, use class instance variables
   - If the attribute is visible, use `class_attribute` (from eg. gorillib). Be
     careful to not modify parent `class_attribute`s in place.
 
 * Assign proper visibility levels to methods (`private`, `protected`)
   in accordance with their intended usage. Don't go off leaving
-  everything `public` (which is the default). 
+  everything `public` (which is the default).
 * Indent the `public`, `protected`, and `private` methods as much the
   enclosing scope they apply to. Leave one blank line above and below them.
 
@@ -966,7 +999,7 @@ in inheritance.
       end
 
     private
-    
+
       def private_method
         # ...
       end
@@ -1001,6 +1034,7 @@ in inheritance.
     end
     ```
 
+<a name="exceptions"></a>
 ## Exceptions
 
 * Don't suppress exceptions.
@@ -1012,7 +1046,7 @@ in inheritance.
       # the rescue clause does absolutely nothing
     end
     ```
-  
+
 * Don't use exceptions for flow of control.
 
     ```Ruby
@@ -1029,11 +1063,13 @@ in inheritance.
     else
       n / d
     ```
-  
-* Do not rescue the `Exception` class. Rescue `StandardError` if you must:
+
+* Do not rescue the `Exception` class. `StandardError` is the most
+  reasonable catch-all, but you should rescue the most precise error
+  you can.
 
     ```Ruby
-    # bad 
+    # bad
     begin
       # an exception occurs here
     rescue
@@ -1076,7 +1112,7 @@ in inheritance.
     rescue StandardError => e
       # some handling
     end
-    ```  
+    ```
 
 * Release external resources obtained by your program in an ensure
 block.
@@ -1091,9 +1127,9 @@ block.
       f.close unless f.nil?
     end
     ```
-  
+
 * Custom exceptions should inherit from the most specific appropriate class in
-  the standard library. Override the `to_s` method, not the `message` method.  
+  the standard library. Override the `to_s` method, not the `message` method.
 
 * In most cases however, raise an exception with specific information. Put
   single quotes around values (so that blank values are visible). Avoid using
@@ -1104,7 +1140,7 @@ block.
     raise ArgumentError, "Ark cannot hold imaginary animals: got '#{animal_1}', '#{animal_2}'" if animal_1.imaginary? || animal_2.imaginary?
     ```
 
-
+<a name="collections"></a>
 ## Collections
 
 * Prefer `%w` to the literal array syntax when you need an array of
@@ -1131,7 +1167,7 @@ tokens. Always use `%w[ ... ]`, and leave a space at the start and end.
 * Use `Set` instead of `Array` when dealing with unique elements. `Set`
   implements a collection of unordered values with no duplicates. This
   is a hybrid of `Array`'s intuitive inter-operation facilities and
-  `Hash`'s fast lookup. 
+  `Hash`'s fast lookup.
 * Use symbols instead of strings as hash keys.
 
     ```Ruby
@@ -1157,6 +1193,7 @@ syntax.
 * Rely on the fact that hashes in 1.9 are ordered.
 * Never modify a collection while traversing it.
 
+<a name="strings"></a>
 ## Strings
 
 * Prefer string interpolation or array-with-join over string concatenation:
@@ -1210,14 +1247,14 @@ syntax.
 
     # ok, because there's no conditional logic
     def to_s
-      [ scheme, ':', 
-        '//', authority, 
-        path, 
-        '?', query_string, 
-        '#', fragment 
+      [ scheme, ':',
+        '//', authority,
+        path,
+        '?', query_string,
+        '#', fragment
       ].join
     end
-    
+
     # good
     def to_s
       uri_str = ''
@@ -1230,6 +1267,7 @@ syntax.
     end
     ```
 
+<a name="regexps"></a>
 ## Regular Expressions
 
 * Don't use regular expressions if you just need plain text search in string:
@@ -1291,6 +1329,7 @@ syntax.
 
 * For complex replacements `sub`/`gsub` can be used with block or hash.
 
+<a name="percent_literals"></a>
 ## Percent Literals
 
 * Use `%w` freely (use square brackets always, since it is an array):
@@ -1336,70 +1375,72 @@ syntax.
 
 * Prefer `{}` as delimiters for all string-like literals, and `[]` for `%w`.
 
+<a name="metaprogramming"></a>
 ## Metaprogramming
 
 * Do not mess around in core classes when writing libraries. (Do not monkey
   patch them.)
 
-* The block form of `class_eval` is preferable to the string-interpolated form. 
+* The block form of `class_eval` is preferable to the string-interpolated form.
   - when you use the string-interpolated form, always supply `__FILE__` and `__LINE__`, so that your backtraces make sense:
 
-    ```ruby
+    ```Ruby
     class_eval "def use_relative_model_naming?; true; end", __FILE__, __LINE__
     ```
   - `define_method` is preferable to `class_eval{ def ... }`
 * When using `class_eval` (or other `eval`) with string interpolation, add a comment block showing its appearance if interpolated (a practice I learned from the rails code):
 
-    ```ruby
-    # from activesupport/lib/active_support/core_ext/string/output_safety.rb
-    UNSAFE_STRING_METHODS.each do |unsafe_method|
-      if 'String'.respond_to?(unsafe_method)
-        class_eval <<-EOT, __FILE__, __LINE__ + 1
-          def #{unsafe_method}(*args, &block)       # def capitalize(*args, &block)
-            to_str.#{unsafe_method}(*args, &block)  #   to_str.capitalize(*args, &block)
-          end                                       # end
-
-          def #{unsafe_method}!(*args)              # def capitalize!(*args)
-            @dirty = true                           #   @dirty = true
-            super                                   #   super
-          end                                       # end
-        EOT
+      ```Ruby
+      # from activesupport/lib/active_support/core_ext/string/output_safety.rb
+      UNSAFE_STRING_METHODS.each do |unsafe_method|
+        if 'String'.respond_to?(unsafe_method)
+          class_eval <<-EOT, __FILE__, __LINE__ + 1
+            def #{unsafe_method}(*args, &block)       # def capitalize(*args, &block)
+              to_str.#{unsafe_method}(*args, &block)  #   to_str.capitalize(*args, &block)
+            end                                       # end
+  
+            def #{unsafe_method}!(*args)              # def capitalize!(*args)
+              @dirty = true                           #   @dirty = true
+              super                                   #   super
+            end                                       # end
+          EOT
+        end
       end
-    end
-    ```
-
+      ```
+  
 * avoid using `method_missing` for metaprogramming. Backtraces become messy; the behavior is not listed in `#methods`; misspelled method calls might silently work (`nukes.luanch_state = false`). Consider using delegation, proxy, or `define_method` instead.  If you must use `method_missing`,
   - be sure to [also define `respond_to?`](http://devblog.avdi.org/2011/12/07/defining-method_missing-and-respond_to-at-the-same-time/)
-  - only catch methods with a well-defined prefix, such as `find_by_*` -- make your code as assertive as possible.
   - call `super` at the end of your statement
-  - delegate to assertive, non-magical methods:
+  - only catch methods with a well-defined prefix, such as `find_by_*` -- make your code as assertive as possible.
+  - delegate to assertive, non-magical methods, named for that prefix:
 
-    ```ruby
-    # bad
-    def method_missing?(meth, *args, &block)
-      if meth.to_s =~ /^find_by_(.*)/
-        # ... lots of code to do a find_by
-      else
-        super
+      ```Ruby
+      # bad
+      def method_missing?(meth, *args, &block)
+        if /^find_by_(?<prop>.*)/ =~ meth.to_s
+          # ... lots of code to do a find_by
+        else
+          super
+        end
       end
-    end
-
-    # good
-    def method_missing?(meth, *args, &block)
-      if meth.to_s =~ /^find_by_(.*)/
-        find_by($1, *args, &block)
-      else
-        super
+  
+      # good
+      def method_missing?(meth, *args, &block)
+        if /^find_by_(?<prop>.*)/ =~ meth
+          find_by(prop, *args, &block)
+        else
+          super
+        end
       end
-    end
-
-    # best of all, though, would to define_method as each findable attribute is declared  
-    ```
+  
+      # best of all, though, would to define_method as each findable attribute is declared
+      ```
 
 * avoid Aliasing/Redefining methods. Instead, generate a `Module` and inject it.
   - calling `super` is a good idea.
   - if you're going to monkey patch, make sure that the method isn’t already there.
 
+<a name="setup"></a>
 ## Setup
 
 * Include a `README.md` that includes all installation steps.
@@ -1410,6 +1451,7 @@ syntax.
   exclude `Gemfile.lock`.
 * Do not version an `.rvmrc` file into a repo.
 
+<a name="misc"></a>
 ## Misc
 
 * Write `ruby -w` safe code.
