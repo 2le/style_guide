@@ -231,29 +231,31 @@ You can generate a PDF or an HTML copy of this guide using
     ```
 
 * Indent `protected`, `public`, `private` and `module_function` at the same
-  level as the enclosing declaration:
+  level as the enclosing declaration.
+  
+  - good:
 
-    ```Ruby
-    module Validations
-
-      def valid?(context = nil)
-        current_context, self.validation_context = validation_context, context
-        errors.clear
-        run_validations!
-      ensure
-        self.validation_context = current_context
+      ```Ruby
+      module Validations
+  
+        def valid?(context = nil)
+          current_context, self.validation_context = validation_context, context
+          errors.clear
+          run_validations!
+        ensure
+          self.validation_context = current_context
+        end
+  
+        # ...
+  
+      protected
+  
+        def run_validations!
+          run_callbacks :validate
+          errors.empty?
+        end
       end
-
-      # ...
-
-    protected
-
-      def run_validations!
-        run_callbacks :validate
-        errors.empty?
-      end
-    end
-    ```
+      ```
 
   - bad (easy to read past):
 
