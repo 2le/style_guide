@@ -6,13 +6,14 @@ programmers. A style guide that reflects real-world usage gets used, and a
 style guide that holds to an ideal that has been rejected by the people it is
 supposed to help risks not getting used at all &ndash; no matter how good it is.
 
-The guide is separated into several sections of related rules. I've
-tried to add the rationale behind the rules (if it's omitted I've
-assumed that is pretty obvious).
+The guide is separated into several sections of related rules. We've tried to
+add the rationale behind the rules (if it's omitted we've assumed that is pretty
+obvious).
 
-These rules didn't come out of nowhere - they are largely based on @bbatsov's
-[ruby-style-guide](https://github.com/bbatsov/ruby-style-guide) and the sober judgement of our
-senior engineers. They reflect feedback and suggestions from members of the Ruby community and
+The guidelines didn't come out of nowhere. They are largely based on @bbatsov's
+[ruby-style-guide](https://github.com/bbatsov/ruby-style-guide), modified
+according to the sober judgement and good taste of our senior engineers. The
+guide reflects feedback and suggestions from members of the Ruby community and
 various highly regarded Ruby programming resources, such as
 ["Programming Ruby 1.9"](http://pragprog.com/book/ruby3/programming-ruby-1-9) and
 ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177).
@@ -20,6 +21,9 @@ various highly regarded Ruby programming resources, such as
 The guide is still a work in progress, and we strongly invite your feedback --
 guidelines to add, decisions you disagree with, illustrations of good or bad
 practice.
+
+> A foolish consistency is the hobgoblin of little minds
+> -- [Ralph Waldo Emerson](http://www.bartleby.com/100/420.47.html)
 
 This is a _guide_, not a _rulebook_. Break the rules with good taste, but not
 capriciously. For every one of the guidelines, there is a sound argument against
@@ -173,32 +177,32 @@ You can generate a PDF or an HTML copy of this guide using
     ```Ruby
     # starting point (line is too long)
     def send_mail(source)
-      Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
+      Mailer.deliver(to => 'bob@example.com', from => 'us@example.com', subject => 'Important message', body => source.text)
     end
 
     # bad (hanging way out in space):
     def send_mail(source)
-      Mailer.deliver(to:      'bob@example.com',
-                     from:    'us@example.com',
-                     subject: 'Important message',
-                     body:    source.text)
+      Mailer.deliver(to =>      'bob@example.com',
+                     from =>    'us@example.com',
+                     subject => 'Important message',
+                     body =>    source.text)
     end
 
     # bad (inconsistent indentation):
     def send_mail(source)
-      Mailer.deliver(to:      'bob@example.com',
-        from:    'us@example.com',
-        subject: 'Important message',
-        body:    source.text)
+      Mailer.deliver(to => 'bob@example.com',
+        from => 'us@example.com',
+        subject => 'Important message',
+        body => source.text)
     end
 
-    # good
+    # good (can easily read down the list of keys and list of values)
     def send_mail(source)
       Mailer.deliver(
-        to:      'bob@example.com',
-        from:    'us@example.com',
-        subject: 'Important message',
-        body:     source.text)
+        to      => 'bob@example.com',
+        from    => 'us@example.com',
+        subject => 'Important message',
+        body    => source.text)
     end
     ```
 
@@ -229,33 +233,33 @@ You can generate a PDF or an HTML copy of this guide using
     reluctance  = hemiconducer.reluctor.reluctance
     phase       = moon.phase - average_marzelvane_phase
     ```
-    
+
 * Don't be over-DRY -- a repeated clause, written in parallel, is easier to read
   than a trivial loop:
-  
+
     ```Ruby
     # bad
     [ :flux, :phrasal, :nimbus ].each do |capacitor_type|
       counterrotate_capacitor capacitor_type, moon.phase, reluctance
     end
-    
+
     # good
     counterrotate_capacitor :flux,    moon.phase, reluctance
     counterrotate_capacitor :phrasal, moon.phase, reluctance
     counterrotate_capacitor :nimbus,  moon.phase, reluctance
     ```
-    
+
   let good taste be your guide, but when lines of code are equivalent prefer the
   small multiple over the explicit loop.
 
 * Indent `protected`, `public`, `private` and `module_function` at the same
   level as the enclosing declaration.
-  
+
   - good:
 
       ```Ruby
       module Validations
-  
+
         def valid?(context = nil)
           current_context, self.validation_context = validation_context, context
           errors.clear
@@ -263,11 +267,11 @@ You can generate a PDF or an HTML copy of this guide using
         ensure
           self.validation_context = current_context
         end
-  
+
         # ...
-  
+
       protected
-  
+
         def run_validations!
           run_callbacks :validate
           errors.empty?
@@ -282,9 +286,9 @@ You can generate a PDF or an HTML copy of this guide using
         def valid?
           # ....
         end
-  
+
         protected
-  
+
         def run_validations!
           # ...
         end
@@ -298,9 +302,9 @@ You can generate a PDF or an HTML copy of this guide using
         def valid?
           # ....
         end
-  
+
         protected
-  
+
           def run_validations!
             # ...
           end
@@ -732,31 +736,18 @@ values. (Consider what would happen if the current value happened to be
   always use parentheses in the method invocation. For example, write
 `f((3 + 2) + 1)`.
 
+* In an expression with multiple parentheses, tastefully insert whitespace to
+  let the reader more easily pair open/close parens and see groups.
+
+    ```Ruby
+    # bad (a petty consistency is
+    # good
+    quad_1 = (-b + Math.sqrt( b**2 + (4 * a * c) )) / (2 * a)
+    quad_1 = (-b + Math.sqrt( b**2 - (4 * a * c) )) / (2 * a)
+    ```
+
 * Always run the Ruby interpreter with the `-w` option so it will warn
 you if you forget either of the rules above!
-
-* When the keys of your hash are symbols use the Ruby 1.9 hash literal
-syntax.
-
-    ```Ruby
-    # bad
-    hash = { :one => 1, :two => 2 }
-
-    # good
-    hash = { one: 1, two: 2 }
-    ```
-
-* Use the new lambda literal syntax.
-
-    ```Ruby
-    # bad
-    adder = lambda{|a, b| a + b }
-    adder.call(1, 2)
-
-    # good
-    adder = ->(a, b){a + b }
-    adder.(1, 2)
-    ```
 
 * Use `_` for unused block parameters.
 
@@ -766,6 +757,38 @@ syntax.
 
     # good
     result = hash.map{|_, v| v + 1 }
+    ```
+
+### Ruby 1.9-only sugar
+
+For all internal projects and most external projects we have abandoned ruby 1.8
+compatibility. The exceptions are Wukong, *all* cookbooks, ironfan, configilere,
+and most of gorillib. Outside of those:
+
+* When the keys of your hash are symbols you may use the Ruby 1.9 hash
+literal syntax.
+
+    ```Ruby
+    # good
+    hash = { :one => 1, :two => 2 }
+
+    # if project is 1.9-only and keys are only symbols
+    hash = { one: 1, two: 2 }
+    ```
+
+* You should use the new lambda literal syntax *unless* 1.8-compatibility is
+  required. Omit parentheses if there are no arguments to the block.
+
+    ```Ruby
+    # bad
+    adder = lambda{|a, b| a + b }
+    adder.call(1, 2)
+    id_generator = Proc.new{ [Time.now.to_f, $!, rand].join('-') }
+
+    # good
+    adder = ->(a, b){a + b }
+    adder.(1, 2)
+    id_generator = ->{ [Time.now.to_f, $!, rand].join('-') }
     ```
 
 <a name="naming"></a>
@@ -1400,17 +1423,110 @@ syntax.
 <a name="metaprogramming"></a>
 ## Metaprogramming
 
-* Do not mess around in core classes when writing libraries. (Do not monkey
-  patch them.)
+Use metaprogramming sparely. Metaprogramming should only occur in frameworks,
+not applications -- it is justified to abstract a widely-repeated pattern of
+long use, and rarely otherwise.
 
-* The block form of `class_eval` is preferable to the string-interpolated form.
-  - when you use the string-interpolated form, always supply `__FILE__` and `__LINE__`, so that your backtraces make sense:
+* Our canonical language is *Ruby 1.9.2+ plus Gorillib's extensions*.
+  - Do not otherwise mess around (monkey patch) with core classes.
+  - Do not bring in other code from ActiveSupport, extlib or the like. Exception:
+    if you are writing a Rails app, chef plugin, or other fully
+    framework-immersed code, use that framework's features freely.
+
+
+* Provide light predictable magic or no magic at all:
+
+  - separate sugar from fuctionality. 
+  
+    Good: The `collects` method doesn't do anything but dispatch to other methods.
+
+    ```Ruby
+    # Given a class, creates a method to create-or-retrieve
+    #
+    # @example creating helper methods
+    #   class Kitchen
+    #     collects(Utensil)
+    #   end
+    #   my_kitchen = Kitchen.new
+    #   my_kitchen.utensil 'Sauce Pot', :gallons => 5
+    #   my_kitchen.utensil('Sauce Pot') #=> #<Utensil name="Sauce Pot" gallons=5>
+    #
+    def collects(klass)
+      field_name = klass.name.underscore
+      define_method(field_name) do |obj_name, *args, &block|
+        obj = registry(klass).find_or_create(obj_name)
+        obj.configure(*args, &block) if args.present? || block_given?
+        obj
+      end
+    end
+    ```
+    
+  - Options are often a smell. Encode the common case in the sugar method; the
+    preceding principle ensures the user can answer a necessarily complex use
+    case with necessarily explicit code. The resulting verbosity is a *good*
+    thing: the reader is left in no doubt that something unusual is being done.
+    
+  - Be assertive always -- but especially when providing sugar. Light type
+    conversion and multiple behaviors in service of readability is great, but
+    don't provide multiple ways of doing the same thing. 
+
+    Bad: this disastrously flexible interface can't conceivably be documented,
+    let alone tested.
+    
+    ```Ruby
+    #
+    # Get or update path to the input file. 
+    #
+    # @param [Array,Pathname,String] filename - path to input file. You can pass
+    #   in pretty much anything and it will be converted.
+    #
+    def input_file(filename=nil)
+      return @input_file if filename.blank?
+      @input_file =
+        case filename
+        when Array       then File.join(filename)
+        when Pathname    then filename
+        when %r{file://} then Addressable.parse(filename).path
+        when             then File.expand_path(filename)
+        else raise "Don't know how to interpret filename '#{filename}'"
+        end
+    end
+    ```
+    
+    Good: makes bold, predictable choices. Want to use `file://` references?
+    Well tough titty toenails, do it yourself.
+    
+    ```Ruby
+    #
+    # Get or update path to the input file.
+    #
+    # @example
+    #   input_file   '~/skrilla.csv'
+    #   input_file   #=> '/Users/flip/skrilla.csv'
+    #
+    # @param [#to_s] filename - path to input file. You may use shell shorthand
+    #   like '~/script.tsv' and './accounts.csv' -- they will be `expand_path`ed
+    #   into absolute paths.
+    #
+    # @return path to input_file, nil if unset.
+    #
+    def input_file(filename=nil)
+      if filename then @input_file = File.expand_path(filename.to_s) ; end
+      @input_file
+    end
+    ```
+
+* The block form of `class_eval` is preferable to the string-interpolated
+  form. `define_method` is preferable to `class_eval{ def ... }`
+
+* When using `class_eval` (or other `eval`) with string interpolation:
+  - Supply `__FILE__` and `__LINE__` so that your backtraces make sense:
 
     ```Ruby
     class_eval "def use_relative_model_naming?; true; end", __FILE__, __LINE__
     ```
-  - `define_method` is preferable to `class_eval{ def ... }`
-* When using `class_eval` (or other `eval`) with string interpolation, add a comment block showing its appearance if interpolated (a practice I learned from the rails code):
+
+  - add a comment block showing its appearance if interpolated:
 
       ```Ruby
       # from activesupport/lib/active_support/core_ext/string/output_safety.rb
@@ -1420,7 +1536,7 @@ syntax.
             def #{unsafe_method}(*args, &block)       # def capitalize(*args, &block)
               to_str.#{unsafe_method}(*args, &block)  #   to_str.capitalize(*args, &block)
             end                                       # end
-  
+
             def #{unsafe_method}!(*args)              # def capitalize!(*args)
               @dirty = true                           #   @dirty = true
               super                                   #   super
@@ -1429,7 +1545,7 @@ syntax.
         end
       end
       ```
-  
+
 * avoid using `method_missing` for metaprogramming. Backtraces become messy; the behavior is not listed in `#methods`; misspelled method calls might silently work (`nukes.luanch_state = false`). Consider using delegation, proxy, or `define_method` instead.  If you must use `method_missing`,
   - be sure to [also define `respond_to?`](http://devblog.avdi.org/2011/12/07/defining-method_missing-and-respond_to-at-the-same-time/)
   - call `super` at the end of your statement
@@ -1445,7 +1561,7 @@ syntax.
           super
         end
       end
-  
+
       # good
       def method_missing?(meth, *args, &block)
         if /^find_by_(?<prop>.*)/ =~ meth
@@ -1454,7 +1570,7 @@ syntax.
           super
         end
       end
-  
+
       # best of all, though, would to define_method as each findable attribute is declared
       ```
 
