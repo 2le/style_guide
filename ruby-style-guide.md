@@ -778,6 +778,8 @@ literal syntax.
 
 * You should use the new lambda literal syntax *unless* 1.8-compatibility is
   required. Omit parentheses if there are no arguments to the block.
+  Avoid situations where understanding the subtle differences between Procs and lambda is required, i.e. returning.
+  Prefer `->` over `lambda` over `Proc.new`.
 
     ```Ruby
     # bad
@@ -850,7 +852,7 @@ literal syntax.
     ```
 
 * Prefer `map` over `collect`, `find` over `detect`, `select` over
-  `find_all`, `reduce` over `inject` and `size` over `length`. This is
+  `find_all`, `inject` over `reduce`. No preference between `size` and `length`. This is
   not a hard requirement; if the use of the alias enhances
   readability, it's ok to use it. The rhyming methods are inherited from
   Smalltalk and are not common in other programming languages. The
