@@ -23,6 +23,7 @@ them later."
 * **Getting Started**
   - installation & prerequisites 
   - how to run examples and tests
+    - include a `Procfile` to start any necessary servers or daemon processes
   - location of:
     - code
     - issue tracker
@@ -38,7 +39,7 @@ them later."
 
 * **Detailed Usage**
   - models and interface
-  - examples  
+  - examples
   - configuration 
   - middleware or plugins
   - how it works
@@ -77,6 +78,9 @@ Include the following in your project:
   - `notes/known_issues.md`
   - `notes/performance.md`
   - `notes/references.md`
+* `examples/`
+* `data/`
+* `Guardfile`, `Procfile`
 
 ## Formatting
 
