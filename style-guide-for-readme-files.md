@@ -21,7 +21,7 @@ them later."
 * **Example Usage**: a basic example. Nothing fancy -- put rich examples in the detailed usage section
 
 * **Getting Started**
-  - installation & prerequisites 
+  - installation & prerequisites
   - how to run examples and tests
     - include a `Procfile` to start any necessary servers or daemon processes
   - location of:
@@ -32,22 +32,22 @@ them later."
     - compiled documentation (add the project to [rdoc.info](http://rdoc.info))
     - travis-ci results
     - mailing list
-  
+
 * **Design Goals**
-  - lightweight or full-featured? 
+  - lightweight or full-featured?
   - performance, flexibility, expressiveness?
 
 * **Detailed Usage**
   - models and interface
   - examples
-  - configuration 
+  - configuration
   - middleware or plugins
   - how it works
 
 * **Comparable Tools**
 
 * **Developer info**
-  - Important Components 
+  - Important Components
   - layout of internal code tree
   - Limitations and known issues
   - performance and benchmarking
@@ -58,40 +58,23 @@ them later."
   - Credits
   - Copyright
 
-## Supporting Documentation
-
-Include the following in your project:
-
-* `README.md`    -- external description and documentation, as defined above.
-  - This is the only support document in the code root. The rest go in the wiki (`notes/` folder). Don't make 'README-[subcomponent].md`, or `path/to/[subcomponent]/README.md`.
-* `LICENSE.md`   -- we usually use the Apache 2.0 license. If the project is internal, it should state 'all rights reserved'.
-* `CHANGELOG.md` -- update with changes before pushing a new version
-* `TODO.md`      -- known issues and nitpicks.
-
-* `notes/`       -- a `git submodule`d version of the project's wiki. If sections outlined above start to become lengthy, separate them into files named as follows:
-  - `notes/INSTALL.md`
-  - `notes/design_goals.md`
-  - `notes/examples.md`
-  - `notes/configuration.md`
-  - `notes/code_components.md`
-  - `notes/code_layout.md`
-  - `notes/known_issues.md`
-  - `notes/performance.md`
-  - `notes/references.md`
-* `examples/`
-* `data/`
-* `Guardfile`, `Procfile`
-
 ## Formatting
 
 * Call the file `README.md`.
-* Write in markdown format. 
-  - you may use triple backtick blocks for code, with the language prefixed.
-  
+* Write in markdown format.
+  - You should use triple backtick blocks for code, and supply a language prefix:
+
         ```ruby
         def hello(str)
           puts "hello #{str}!"
         end
         ```
-        
-* Do not wrap lines.         
+
+* Do not wrap lines. In emacs, enable the `longlines-mode` to make your document word wrap intelligently.
+
+
+
+
+## Supporting Documentation
+
+Besides a `README.md`, your repo should contain a `CHANGELOG.md` summarizing major code changes, a `LICENSE.md` describing the code's license (typically Apache 2.0 for our open-source projects, All Rights Reserved for internal projects), and a `notes/` directory that is a git submodule of the project's wiki. See the [style guide for repo organization](https://github.com/infochimps-labs/style_guide/blob/master/style-guide-for-repo-organization.md) for more details.
