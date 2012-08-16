@@ -1549,7 +1549,7 @@ long use, and rarely otherwise.
       ```
 
 * avoid using `method_missing` for metaprogramming. Backtraces become messy; the behavior is not listed in `#methods`; misspelled method calls might silently work (`nukes.luanch_state = false`). Consider using delegation, proxy, or `define_method` instead.  If you must use `method_missing`,
-  - be sure to [also define `respond_to?`](http://devblog.avdi.org/2011/12/07/defining-method_missing-and-respond_to-at-the-same-time/)
+  - be sure to define [`respond_to_missing?`](http://robots.thoughtbot.com/post/28335346416/always-define-respond-to-missing-when-overriding) (1.9 only; it means you don't have to [also define `respond_to?`](http://devblog.avdi.org/2011/12/07/defining-method_missing-and-respond_to-at-the-same-time/))
   - call `super` at the end of your statement
   - only catch methods with a well-defined prefix, such as `find_by_*` -- make your code as assertive as possible.
   - delegate to assertive, non-magical methods, named for that prefix:
